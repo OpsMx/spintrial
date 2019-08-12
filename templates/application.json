@@ -1,0 +1,18 @@
+{
+ "cloudProviders": "kubernetes",
+ "email": "$inemail",
+ "instancePort": 80,
+ "name": "$usname",
+ "permissions": {
+  "EXECUTE": [
+   "$groupnam"
+  ],
+  "READ": [
+   "$groupnam"
+  ],
+  "WRITE": [
+   "$groupnam"
+  ]
+ },
+ "trafficGuards": []
+}
