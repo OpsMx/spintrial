@@ -43,7 +43,8 @@ public class SpintrailService {
 			emailId = (String) payloadJSONResponseObj.get("emailId");
 			mobileNo = (String) payloadJSONResponseObj.get("phonenumber");
 
-			boolean isEmailValid = mailValidate(emailId.trim());
+			//boolean isEmailValid = mailValidate(emailId.trim());
+			boolean isEmailValid = true;
 
 			if (isEmailValid) {
 				String responseOfAD = createUserInAD(firstName, lastName, emailId, mobileNo);
@@ -58,7 +59,7 @@ public class SpintrailService {
 					sendMail(firstName, userName, userPass, emailId);
 					payloadJSONResponseObj.put("success", true);
 					payloadJSONResponseObj.put("response",
-							"User creation is done! Please check your register email Id");
+							"Please check your email for instructions to access OpsMx Spinnaker Freel Trial");
 					return payloadJSONResponseObj.toJSONString();
 				} else {
 					payloadJSONResponseObj.put("success", false);
@@ -138,11 +139,11 @@ public class SpintrailService {
 		MimeMessage message = sender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
 
-		String subject = "Welcome to OpsMx Spinnaker Trail";
+		String subject = "OpsMx Spinnaker free Trial is ready to use";
 		String htmlBodyText = "Hi " + firstName
-				+ ",\n \nThanks for registering up to keep in touch with OpsMx Spinnaker Trail. Here is your \n\nUserName - "
-				+ userName + "\nPassword - " + pass
-				+ "\n\nStart using OpsMx Spinnaker Trail by click here 'http://spinnakertrial.opsmx.com:32300' \n\n All the Best \n OpsMx";
+				+ ",\n \nThank you for signing up for a subscription to OpsMx Spinnaker free trial, Below are the subscription details. \n\nUserName - "
+				+ userName + "\nPassword - " + pass	+ "\n\nStart using OpsMx Spinnaker Trial by clicking here 'http://spinnakertrial.opsmx.com:9000' your subscription will expire in 7 Days. \n\n Here is link of detail document for refrence 'http://spinnakertrial.opsmx.com:9000' \n\n All the Best \n OpsMx";
+	
 		try {
 			helper.setTo(userMailID);
 			helper.setSubject(subject);
@@ -158,7 +159,7 @@ public class SpintrailService {
 
 	public static void main(String[] args) {
 		SpintrailService st = new SpintrailService();
-		st.mailValidate("lalitv92@gmail.com");
+		st.sendMail("Lalit","user","pass","lalitv92@gmail.com");
 
 	}
 
