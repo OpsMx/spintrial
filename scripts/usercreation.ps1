@@ -18,10 +18,8 @@ Param(
 
 $fname = $fname.substring(0,1).ToUpper()+$fname.substring(1).ToLower() 
 $lname = $lname.substring(0,1).ToUpper()+$lname.substring(1).ToLower()
-
 $OUpath = "ou=trialspin,dc=opsmx,dc=com"
 $displayname = $fname +" "+ $lname 
-# $username = ( $fname + $lname ).ToLower()
 
 function create_user()
 {
@@ -29,6 +27,8 @@ function create_user()
                 [reflection.assembly]::loadwithpartialname("system.web") | Out-Null
                 $password1= [System.Web.Security.Membership]::GeneratePassword(12,1)
                 # Write-Host '"userPass":''"' $Password1 '"'
+              $runame = get-random -minimum -10000000 -maximum 99999999
+              $username = "opsmx" + $runame
               
               # New user creation if not in AD
               $userid
@@ -100,37 +100,18 @@ function create_user()
 					  }
 				 } # For each    
 
-
 }
-
-
-if(Get-ADUser -Filter {(mail -eq $email) -or (mobilephone -eq $mobileNo)} -Properties GivenName,Surname,mail,mobilephone| Select-Object Name,GivenName,Surname,mail,mobilephone) 
+if(Get-ADUser -Filter {(mail -eq $email)} -Properties GivenName,Surname,mail,mobilephone| Select-Object Name,GivenName,Surname,mail,mobilephone) 
 {
-            $username = ( $fname + $lname ).ToLower()
-            Write-Output '{'
-            Write-Host '"userCreated": false,'
+        Write-Output '{'
+        Write-Host '"userCreated": false,'
 	    Write-Host '"userName":"'$Username'",'
 	    Write-Host '"userPass":"'$Password1'",'
 	    Write-Host '"description": "User email/mobile number already exists"'
-            Write-Host '}'
+        Write-Host '}'
 }
-
 else
-
-
-{
-        if(Get-ADUser -Filter {(GivenName -eq $fname) -or (Surname -eq $lname)} -Properties GivenName,Surname,mail,mobilephone| Select-Object Name,GivenName,Surname,mail,mobilephone)
-         {
-        
-         $username = ( $fname ).ToLower() + $mobileNo
-         create_user
-
-         }
-         else
-         {
-         	$username = ( $fname + $lname ).ToLower()
-          	create_user
-         }
-
+{    
+        create_user
 }
 	
