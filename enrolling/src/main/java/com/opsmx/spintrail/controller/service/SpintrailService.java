@@ -43,12 +43,12 @@ public class SpintrailService {
 			emailId = (String) payloadJSONResponseObj.get("emailId");
 			mobileNo = (String) payloadJSONResponseObj.get("phonenumber");
 
-			//boolean isEmailValid = mailValidate(emailId.trim());
+			// boolean isEmailValid = mailValidate(emailId.trim());
 			boolean isEmailValid = true;
 
 			if (isEmailValid) {
 				String responseOfAD = createUserInAD(firstName, lastName, emailId, mobileNo);
-				System.out.println("\n Output of AD :: " +responseOfAD );
+				System.out.println("\n Output of AD :: " + responseOfAD);
 				JSONObject responseOfADInJSONObj = (JSONObject) parser.parse(responseOfAD);
 				boolean isUserCreated = (boolean) responseOfADInJSONObj.get("userCreated");
 				String userName = (String) responseOfADInJSONObj.get("userName");
@@ -59,7 +59,7 @@ public class SpintrailService {
 					sendMail(firstName, userName, userPass, emailId);
 					payloadJSONResponseObj.put("success", true);
 					payloadJSONResponseObj.put("response",
-							"Please check your email for instructions to access OpsMx Spinnaker Freel Trial");
+							"You will receive an email within a few minutes with instructions to access your OpsMx Spinnaker free trial.");
 					return payloadJSONResponseObj.toJSONString();
 				} else {
 					payloadJSONResponseObj.put("success", false);
@@ -83,9 +83,9 @@ public class SpintrailService {
 		try {
 			String scriptAndInputs = "C:\\Users\\opsmxadmn\\Documents\\newrest.ps1 " + firstName + " " + lastName + " "
 					+ emailId + " " + mobile;
-			
+
 			System.out.println("\n script and there inputs :: " + scriptAndInputs);
-			
+
 			exec = Runtime.getRuntime().exec(new String[] { "powershell.exe", "-c", scriptAndInputs });
 			exec.waitFor();
 
@@ -139,11 +139,11 @@ public class SpintrailService {
 		MimeMessage message = sender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
 
-		String subject = "OpsMx Spinnaker free Trial is ready to use";
+		String subject = "Your OpsMx Spinnaker free trial is ready for use!";
 		String htmlBodyText = "Hi " + firstName
-				+ ",\n \nThank you for signing up for a subscription to OpsMx Spinnaker free trial, Below are the subscription details. \n\nUserName - "
-				+ userName + "\nPassword - " + pass	+ "\n\nStart using OpsMx Spinnaker Trial by clicking here 'http://spinnakertrial.opsmx.com:9000' your subscription will expire in 7 Days. \n\n Here is link of detail document for refrence 'http://spinnakertrial.opsmx.com:9000' \n\n All the Best \n OpsMx";
-	
+				+ ",\n \nThank you for signing up for OpsMx Spinnaker free trial. You can start using it at http://spinnakertrial.opsmx.com:9000 . \n\nUserName - "
+				+ userName + "\nPassword - " + pass
+				+ "\n\nPlease note your subscription will expire in 7 Days. \n\n Here are some useful information: \nCreating and running a pipeline in Spinnaker https://www.spinnaker.io/concepts/pipelines .\nUser manual of OpsMx Spinnaker free trial https://docs.google.com/document/d/1dnubwdfdDB-XNEfLk8pcXxKX49AGTx95qtlnEEtKSGs .\n\n For questions or issues, please send an email to 'info@opsmx.com'. \n\n All the Best \n OpsMx";
 		try {
 			helper.setTo(userMailID);
 			helper.setSubject(subject);
@@ -159,7 +159,7 @@ public class SpintrailService {
 
 	public static void main(String[] args) {
 		SpintrailService st = new SpintrailService();
-		st.sendMail("Lalit","user","pass","lalitv92@gmail.com");
+		st.sendMail("Lalit", "user", "pass", "lalitv92@gmail.com");
 
 	}
 
