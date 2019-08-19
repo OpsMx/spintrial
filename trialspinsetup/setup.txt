@@ -1,1 +1,59 @@
 Trial Spinnaker setup step-by-step Guide
+
+Step 1:
+1. Create configmap for hal and kube
+2. Create a storage space s3 or gcs bucket
+Step 2:
+3. Create required yml file :
+4.1 Create halconfigmap_template.yml  -- Sample template in github
+4.2 Create halyard_template.yml  -- Sample template in github
+
+4.3 The following field need to be updated according the setup environment as per user in halconfigmap_gke_template.yml
+4.3.1. version: <spinnaker version>  
+4.3.2. under kubernetes tag
+	name: < kubernetes accountName with gke kubeconfigFile > --- For gke config
+	name: < kubernetes accountName with devk8s kubeconfigFile>  --- For dev config
+
+ 	primaryAccount: < kubernetes accountName you like to use as primaryAccount >
+4.3.3. under deploymentEnvironment
+	accountName: < kubernetes accountName you like to use as primaryAccount >
+	location: < name space where you like to deploy spinnaker services >
+4.3.4. under persistanceStorage
+	jsonPath: /home/spinnaker/staging/.gcs/gcs.json < gcs bucket json file from gcp >
+	bucket: < gcs bucket name > -- You can create new bucket in gcp and update		
+4.3.5. under CI --> jenkins  --> masters
+	name: < jenkins name >
+	address: < jenkins server Ip or FQDN, with port number >
+        username: < jenkins authentication username >
+        password: < jenkins authentication user password >
+4.3.6. under security --> ldap
+	url: < ldap server IP or FQDN with ldap port number >
+	userDnPattern: < user pattern with CN format >
+4.3.7. under artifacts --> github --> accounts
+	name: < github accountName >
+	username: < github user name to access >
+	password: < github user password to access >
+
+4.4 The following field need to be updated according the setup environment as per user in halyard_gke_template.yml
+4.4.1 under spec --> spec --> containers 
+	image: < image from repository >
+4.4.2 under spec --> spec --> volumeMounts
+	- name: halconfig < hal config name >
+          mountPath: /home/spinnaker/staging/.hal/config  < user has to mention correct hal config file > 
+          subPath: config
+        - name: kubeconfig
+          mountPath: /home/spinnaker/staging/.kube/config < user has to mention correct gkekube config file > 
+          subPath: config
+        - name: devconfig
+          mountPath: /home/spinnaker/staging/.kube/devk8 < user has to mention correct devkube config file > 
+          subPath: devconfig
+        - name: gcsconfig
+          mountPath: /home/spinnaker/staging/.gcs/gcs.json < user has to mention correct bucket config file > 
+          subPath: gcs.json
+Step 3: 
+ execute the script gkeauto.sh with namespace where spinnaker planned to be deployed
+  sh gkeauto.sh <namespace>
+ 
+Step 4 :
+  Verify the spinhalyard pod by gkekube config file
+  command -- kubeconfig 
