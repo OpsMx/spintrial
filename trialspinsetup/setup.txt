@@ -36,7 +36,7 @@ Step 2:
 
 4.4 The following field need to be updated according the setup environment as per user in halyard_gke_template.yml
 4.4.1 under spec --> spec --> containers 
-	image: < image from repository >
+	image: < image from repository >  -- The image should be with root and gcloud installed in it
 4.4.2 under spec --> spec --> volumeMounts
 	- name: halconfig < hal config name >
           mountPath: /home/spinnaker/staging/.hal/config  < user has to mention correct hal config file > 
@@ -56,4 +56,32 @@ Step 3:
  
 Step 4 :
   Verify the spinhalyard pod by gkekube config file
-  command -- kubeconfig 
+  command -- kubectl -n <namespace> get pod
+  kubectl -n <namespace> exec -it <spin-halyad pod > /bin/bash
+Step 5 :
+	Run hal config inside spin-halyard pod
+	Run hal deploy apply inside spin-halyard pod - wait untill all services/pods comes up
+	Check by kubectl get pods,svc
+	
+	update patch deck and gate with LoadBalancer
+	kubectl patch svc spin-gate --type='json' -p='[{"op": "replace", "path": "/spec/type", "value": "LoadBalancer"}]'
+	kubectl patch svc spin-deck --type='json' -p='[{"op": "replace", "path": "/spec/type", "value": "LoadBalancer"}]'
+	
+	Check the port by 
+	kubectl get svc
+	
+	Do baseurl override with api and ui
+	hal config security ui edit --override-base-url < http://IP:9000 >     --- For deck
+	hal config security api edit --override-base-url < http://IP:8084 >     --- For gate
+	
+	The execute
+	hal deploy apply
+	Wait and verify
+	kubectl get pods,svc
+	
+Step 6: 
+	Do update ldap for authentication and authorization
+	Do RBAC
+Step 7:
+	Ref : powershell script 
+	
