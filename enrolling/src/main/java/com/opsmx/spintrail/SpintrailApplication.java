@@ -5,25 +5,28 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class SpintrailApplication {
-	
-	/*
-	 * @Bean public JavaMailSender getJavaMailSender() { JavaMailSenderImpl
-	 * mailSender = new JavaMailSenderImpl(); mailSender.setHost("smtp.gmail.com");
-	 * mailSender.setPort(587);
-	 * 
-	 * mailSender.setUsername("lalitv9293@gmail.com");
-	 * mailSender.setPassword("Vikram92!");
-	 * 
-	 * Properties props = mailSender.getJavaMailProperties();
-	 * props.put("mail.transport.protocol", "smtp"); props.put("mail.smtp.auth",
-	 * "true"); props.put("mail.smtp.starttls.enable", "true");
-	 * props.put("mail.debug", "true");
-	 * 
-	 * return mailSender; }
-	 */
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpintrailApplication.class, args);
 	}
+
+	// HTTP port
+
+	//@Value("${http.port}")
+	//private int httpPort;
+
+	// Let's configure additional connector to enable support for both HTTP and
+	// HTTPS
+
+	/*
+	 * @Bean public ServletWebServerFactory servletContainer() {
+	 * TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
+	 * tomcat.addAdditionalTomcatConnectors(createStandardConnector()); return
+	 * tomcat; }
+	 * 
+	 * private Connector createStandardConnector() { Connector connector = new
+	 * Connector("org.apache.coyote.http11.Http11NioProtocol");
+	 * connector.setPort(httpPort); return connector; }
+	 */
 
 }

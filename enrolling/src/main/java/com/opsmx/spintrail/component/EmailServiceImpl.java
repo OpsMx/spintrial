@@ -24,6 +24,6 @@ public class EmailServiceImpl {
 	
 	public static void main(String[] args) {
 		EmailServiceImpl el = new EmailServiceImpl();
-		el.sendSimpleMessage("lalitv92@gmail.com", "No subject", "Hi there how are you brother");
+		el.sendSimpleMessage("lalitv92@gmail.com", "No subject", "Hi there how are you !");
 	}
 }

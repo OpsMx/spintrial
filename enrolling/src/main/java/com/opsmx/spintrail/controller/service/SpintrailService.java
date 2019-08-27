@@ -4,27 +4,24 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.opsmx.spintrail.component.ZohoMailOperator;
 
 @Service
 public class SpintrailService {
-
+	
 	@Autowired
-	public JavaMailSender sender;
+	private ZohoMailOperator zohoMailOperator;
+	
 	public JSONParser parser = new JSONParser();
 
 	@SuppressWarnings("unchecked")
@@ -34,6 +31,8 @@ public class SpintrailService {
 		String lastName = new String();
 		String emailId = new String();
 		String mobileNo = new String();
+		String accountExpiryDate = new String();
+		
 		JSONObject payloadJSONResponseObj = new JSONObject();
 
 		try {
@@ -42,6 +41,8 @@ public class SpintrailService {
 			lastName = (String) payloadJSONResponseObj.get("lastName");
 			emailId = (String) payloadJSONResponseObj.get("emailId");
 			mobileNo = (String) payloadJSONResponseObj.get("phonenumber");
+			accountExpiryDate = (String) payloadJSONResponseObj.get("UserAccountExpiryDate");
+			
 
 			// boolean isEmailValid = mailValidate(emailId.trim());
 			boolean isEmailValid = true;
@@ -56,7 +57,7 @@ public class SpintrailService {
 				String description = (String) responseOfADInJSONObj.get("description");
 
 				if (isUserCreated) {
-					sendMail(firstName, userName, userPass, emailId);
+					zohoMailOperator.send(firstName, userName, userPass, emailId, accountExpiryDate);
 					payloadJSONResponseObj.put("success", true);
 					payloadJSONResponseObj.put("response",
 							"You will receive an email within a few minutes with instructions to access your OpsMx Spinnaker free trial.");
@@ -135,31 +136,9 @@ public class SpintrailService {
 		return false;
 	}
 
-	public String sendMail(String firstName, String userName, String pass, String userMailID) {
-		MimeMessage message = sender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(message);
-
-		String subject = "Your OpsMx Spinnaker free trial is ready for use!";
-		String htmlBodyText = "Hi " + firstName
-				+ ",\n \nThank you for signing up for OpsMx Spinnaker free trial. You can start using it at http://spinnakertrial.opsmx.com:9000 . \n\nUserName - "
-				+ userName + "\nPassword - " + pass
-				+ "\n\nPlease note your subscription will expire in 7 Days. \n\n Here are some useful information: \nCreating and running a pipeline in Spinnaker https://www.spinnaker.io/concepts/pipelines .\nUser manual of OpsMx Spinnaker free trial https://docs.google.com/document/d/1dnubwdfdDB-XNEfLk8pcXxKX49AGTx95qtlnEEtKSGs .\n\n For questions or issues, please send an email to 'info@opsmx.com'. \n\n All the Best \n OpsMx";
-		try {
-			helper.setTo(userMailID);
-			helper.setSubject(subject);
-			helper.setText(htmlBodyText);
-
-		} catch (MessagingException e) {
-			e.printStackTrace();
-			return "Error while sending mail ..";
-		}
-		sender.send(message);
-		return "Mail Sent Success!";
-	}
 
 	public static void main(String[] args) {
 		SpintrailService st = new SpintrailService();
-		st.sendMail("Lalit", "user", "pass", "lalitv92@gmail.com");
 
 	}
 
