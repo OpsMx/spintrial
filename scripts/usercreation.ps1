@@ -27,12 +27,11 @@ function create_user()
                 [reflection.assembly]::loadwithpartialname("system.web") | Out-Null
                 $password1= [System.Web.Security.Membership]::GeneratePassword(12,1)
                 # Write-Host '"userPass":''"' $Password1 '"'
-              $runame = get-random -minimum -10000000 -maximum 99999999
+              $runame = get-random -minimum 10000000 -maximum 99999999
               $username = "opsmx" + $runame
               
               # New user creation if not in AD
-              $userid
-              New-ADUser -Name $username -UserPrincipalName $username@opsmx.com -Path $OUpath -AccountPassword (convertto-securestring $Password1 -AsPlainText -Force) -EA stop | Enable-ADAccount 
+              $userid = New-ADUser -Name $username -UserPrincipalName $username@opsmx.com -Path $OUpath -AccountPassword (convertto-securestring $Password1 -AsPlainText -Force) -EA stop | Enable-ADAccount 
               
               # For setting user properties
               $User = Get-ADUser -Identity $username -Properties mail,displayname,GivenName,Surname
@@ -70,14 +69,14 @@ function create_user()
 									continue
 									}
 						# Adding user to group
-						C:\Users\OPSMXA~1\AppData\Local\Temp\kubectl.exe --kubeconfig=devconfig create namespace $username >$null 2>&1
+						C:\Users\OPSMXA~1\AppData\Local\Temp\kubectl.exe --kubeconfig=devconfig.txt create namespace $username >$null 2>&1
 						Add-ADGroupMember -identity $GroupObj -Members $userobj,$adminuser -EA 0 
 						
 						$fileext = ".json"
 						$filename = $gname + $fileext
 
 
-						copy newap.json $filename
+						copy C:\Users\opsmxadmn\Documents\newap.json $filename
 						(Get-Content .\$filename).replace('$inemail',$email) | Set-Content .\$filename
 						(Get-Content .\$filename).Replace('$usname',$username) | Set-Content .\$filename
 						(Get-Content .\$filename).Replace('$groupnam',$groupname) | Set-Content .\$filename
@@ -86,12 +85,12 @@ function create_user()
 
 						rm .\$filename
 
-						# Succefully user and Group created. User added to created group
+						# Succefully user and Group created. User added to created groupspi 
 						Write-Output '{'
 						Write-Host '"userCreated": true,'
 						Write-Host '"userName":"'$Username'",'
 						Write-Host '"userPass":"'$Password1'",'
-						Write-Host '"description": "User with userid '$Username' and mobile created Successfully"'
+						Write-Host '"description": "User with userid '$Username' created Successfully"'
 						Write-Host	'}'
 						exit
 						} 
@@ -107,7 +106,7 @@ if(Get-ADUser -Filter {(mail -eq $email)} -Properties GivenName,Surname,mail,mob
         Write-Host '"userCreated": false,'
 	    Write-Host '"userName":"'$Username'",'
 	    Write-Host '"userPass":"'$Password1'",'
-	    Write-Host '"description": "User email/mobile number already exists"'
+	    Write-Host '"description": "You already have an active free trial. Please use that instance. You can sign up for a new trial once your current active trial expires"'
         Write-Host '}'
 }
 else
