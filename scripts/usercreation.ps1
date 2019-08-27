@@ -35,10 +35,10 @@ function create_user()
               New-ADUser -Name $username -UserPrincipalName $username@opsmx.com -Path $OUpath -AccountPassword (convertto-securestring $Password1 -AsPlainText -Force) -EA stop | Enable-ADAccount 
               
               # For setting user properties
-              $User = Get-ADUser -Identity $username -Properties mail,displayname,mobilephone,GivenName,Surname
+              $User = Get-ADUser -Identity $username -Properties mail,displayname,GivenName,Surname
               $User.mail = $email
 			  $User.displayname = $displayname
-			  $User.mobilephone = $mobileNo
+			  # $User.mobilephone = $mobileNo
 			  $User.GivenName = $fname
 			  $User.Surname = $lname
 			  Enable-ADAccount -Identity $username
