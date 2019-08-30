@@ -45,7 +45,7 @@ public class ZohoMailOperator {
 			}
 		});
 
-		String subject = "Your OpsMx Spinnaker free trial is ready for use!";
+		String subject = "Your Spinnaker trial is ready.";
 		String htmlBodyText = "Hi " + firstName	+ ",<br><br>Thank you for signing up for OpsMx Spinnaker free trial. You can start using it at <a href=\"https://spinnakertrial.opsmx.com:9000\">OpsMx Spinnakertrial</a>.<br><br>UserName - "	+ userName + "<br>Password - " + pass + "<br><br>Please note your subscription will expire in 7 Days on "+ accountExpiryDate +" (reply back if needed to extend the trial).<br><br>If you are new to Spinnaker, you may want to familiarize yourself with <a href=\"https://www.spinnaker.io/concepts\">Spinnaker concepts</a>. <br><a href=\"https://docs.opsmx.com/spinnakerTrial\">Here</a> is a tutorial on creating and running a pipeline in your spinnaker instance. <br>Also, set up an <a href=\"https://meetings.hubspot.com/opsmx/spinnaker-trial\">office hour</a> with a Spinnaker expert to get live help with your trial. <br><br> For questions or issues, please send an email to spintrial@opsmx.com . <br><br>Good Luck, <br>OpsMx Spinnaker Team";
 		try {
 			MimeMessage message = new MimeMessage(session);
