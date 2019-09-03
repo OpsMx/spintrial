@@ -43,7 +43,6 @@ public class SpintrailService {
 			mobileNo = (String) payloadJSONResponseObj.get("phonenumber");
 			accountExpiryDate = (String) payloadJSONResponseObj.get("UserAccountExpiryDate");
 			
-
 			// boolean isEmailValid = mailValidate(emailId.trim());
 			boolean isEmailValid = true;
 
