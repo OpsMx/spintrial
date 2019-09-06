@@ -106,7 +106,7 @@ if(Get-ADUser -Filter {(mail -eq $email)} -Properties GivenName,Surname,mail,mob
         Write-Host '"userCreated": false,'
 	    Write-Host '"userName":"'$Username'",'
 	    Write-Host '"userPass":"'$Password1'",'
-	    Write-Host '"description": "You already have an active free trial. Please use that instance. You can sign up for a new trial once your current active trial expires"'
+	    Write-Host '"description": "You already have an active trial with '$email'. A registration email was sent when you had registered earlier. Please check that email for sign-in information."'
         Write-Host '}'
 }
 else
