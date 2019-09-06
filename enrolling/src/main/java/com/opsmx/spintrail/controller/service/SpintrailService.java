@@ -59,7 +59,7 @@ public class SpintrailService {
 					zohoMailOperator.send(firstName, userName, userPass, emailId, accountExpiryDate);
 					payloadJSONResponseObj.put("success", true);
 					payloadJSONResponseObj.put("response",
-							"You will receive an email within a few minutes with instructions to access your OpsMx Spinnaker free trial.");
+							"You will receive an email at " + emailId + " within a few minutes with instructions to access your OpsMx Spinnaker trial.");
 					return payloadJSONResponseObj.toJSONString();
 				} else {
 					payloadJSONResponseObj.put("success", false);
